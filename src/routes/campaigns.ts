@@ -14,12 +14,14 @@ router.get('/', async (req: AuthRequest, res: Response): Promise<void> => {
       tier,
       minBudget,
       maxBudget,
+      search,
       page = '1',
       limit = '12',
     } = req.query;
 
     const filter: Record<string, unknown> = { status: 'active' };
 
+    if (search) filter.title = { $regex: search as string, $options: 'i' };
     if (niche) filter.niche = { $in: (niche as string).split(',') };
     if (contentType) filter.contentType = { $in: (contentType as string).split(',') };
     if (tier) filter.tier = tier;
